@@ -1,0 +1,106 @@
+/* HEADER */
+.header {
+    background-color:#050505;
+    box-shadow: 0px 1.5px 1.5px #acaaaa;
+    display: flex;
+    flex-direction: column;
+}
+.container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.info ul {
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+.info ul .nav-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #ffffff;
+    padding: 0 40px;
+}
+.info ul .nav-item svg {
+    color: #ffffff;
+}
+.navbar-nav {
+    display: flex;
+}
+.navbar .navbar-toggler {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+.nav-item {
+    font-size: 0.95em;
+    list-style: none;
+    padding: 24px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 100;
+}
+.nav-item .active {
+    color:#ffffff;
+    padding: 5px;
+    font-weight: 100;
+}
+.nav-item a {
+    text-decoration: none;
+    color:#c2c1c1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.nav-item a:hover {
+    color:#77a5bb;
+}
+.container__search form input {
+    width: 600px;
+    height: 50px;
+}
+.container-productos {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.productos__tipo img {
+    height: 600px;
+    object-fit: cover;
+}
+.productos__nombre {
+    margin-top: 10px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.info__tipo {
+    display: flex;
+}
+.info__logo img {
+    margin: 10px;
+}
+.info__descripcion {
+    display: flex;
+    flex-direction: column;
+}
+.descripcion__titulo {
+    text-transform: uppercase;
+    font-family: 'Josefin Sans', sans-serif;
+}
