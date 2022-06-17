@@ -1,64 +1,80 @@
-const aMinuscula = entrada => entrada.toLowerCase()
+const IVA = 0.21
 
-function ingresarNombreUsuario() {
-    let condicion = true
-    while (condicion) {
-        let entrada = prompt('Ingrese su nombre de usuario')
-        if (entrada !== '') {
-            let nombreUsuario = entrada
-            return nombreUsuario
-        }
+class CarritoDeCompras {
+    constructor() {
+        this.productos = []
+        this.total = 0
+        this.cantidadDeProductos = 0
     }
-}
 
-function registrarse() {
-    let entrada = prompt('¿Desea registrarse?')
-    let entradaAMinuscula = aMinuscula(entrada)
-    while (entradaAMinuscula !== 'si') {
-        if (entrada == 'no'){
-            return false
+    obtenerTotal() {
+        this.total = this.productos.reduce((subTotal, producto) => subTotal + producto.precio, 0)
+        return this.total
+    }
+
+    agregarProducto(producto) {
+        this.productos.push(producto)
+        this.cantidadDeProductos = this.cantidadDeProductos + 1
+    }
+
+    eliminarProducto(producto) {
+        if (this.productos.length == 1) {
+            this.productos.pop()
+            this.cantidadDeProductos = this.cantidadDeProductos - 1
         }
         else {
-            let entrada = prompt('¿Desea registrarse?')
-            let entradaAMinuscula = aMinuscula(entrada)
-            continue
+            const indice = this.productos.indexOf(producto)
+            this.productos.splice(indice, 1)
+            this.cantidadDeProductos = this.cantidadDeProductos - 1
         }
     }
-    return true
-}
 
-function registrarNuevoUsuario() {
-    let condicion = true
-    while (condicion){
-        let entrada = prompt('Ingrese un nombre de usuario')
-        if (entrada == '') {
-            alert('Debe ingresar un nombre de usuario')
-            continue
-        }return entrada
+    obtenerCantidadDeProductos() {
+        return this.productos.length
     }
-}
 
-function main() {
-    let condicion = true
-    while(condicion) {
-        let entrada = prompt('¡Hola! ¿Es usuario/a de "Bakú"?')
-        let entradaAMinuscula = aMinuscula(entrada)
-        switch(entradaAMinuscula){
-            case 'si':
-                let nombreUsuario = ingresarNombreUsuario()
-                alert('¡Bienvenido! ' + nombreUsuario)
-                return
-            case 'no':
-                let registrar = registrarse()
-                if (registrar == true ) {
-                    nombreNuevoUsuario = registrarNuevoUsuario()
-                    alert('¡Listo! Su nombre de usuario es ' + nombreNuevoUsuario + '. Gracias por confiar en nosotros')
-                    return
-                }else {return}
-            default:
-                break
+    calcularPrecioPorCuota(nCuotas, interesPorCuota) {
+        const precioPorCuota = (this.total / nCuotas) + ((this.total / nCuotas) * interesPorCuota)
+        return precioPorCuota
+    }
+
+    calcularPrecioEnCuotas(nCuotas, interesPorCuota) {
+        const precioTotal = this.calcularPrecioPorCuota(nCuotas, interesPorCuota) * nCuotas
+        return precioTotal
+    }
+
+    estaEnElCarrito(producto) {
+        return this.productos.includes(producto)
+    }
+
+    mostrarProductos() {
+        const productos = []
+        for (const producto of this.productos) {
+            const nombre = producto.nombre
+            const precio = producto.precio
+            const talle = producto.talle
+            const detalle = [nombre, '$' + precio.toString(), talle].join(', ')
+            productos.unshift(detalle)
         }
-        continue
+        return productos.join('\n')
     }
 }
-main()
+class Producto {
+    constructor(nombre, precio, talle) {
+        this.nombre = nombre
+        this.precio = precio
+        this.talle = talle
+    }
+    calcularIVA() {
+        return (this.precio * IVA)
+    }
+    obtenerPrecio() {
+        return this.precio + this.calcularIVA()
+    }
+    obtenerNombre() {
+        return this.nombre
+    }
+    obtenerTalle() {
+        return this.talle
+    }
+}
