@@ -1,12 +1,15 @@
 /* HEADER */
-
+body {
+    padding-right: 0px;
+    overflow: auto;
+}
 header {
     box-shadow: 1.5px 1.5px 1.5px #afafb4;
     display: flex;
     flex-direction: column;
 }
 .topbar {
-    background-color:#626970;
+    background-color:#e67e21;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,15 +24,23 @@ header {
 .navbar {
     display: flex;
     flex-direction: column;
-    padding: 20px 40px;
-    background-color:#dcdfe0;
+    padding: 0px 20px;
+    padding-bottom: 12px;
+    background-color:#000000;
 }
 .container-nav {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     text-align: center;
+    margin: 20px 0px;
+}
+.logo_header {
+    margin: 0px;
+}
+.navbar-toggler {
+    padding: 0px;
 }
 .menu_hamburguesa {
     width: 45px;
@@ -38,15 +49,16 @@ header {
 .navbar-brand {
     margin-left: 50px;
 }
-.offcanvas {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    background-color:#dcdfe0;
-}
 .navbar-nav {
     display: flex;
     align-items: flex-start;
+}
+.offcanvas {
+    border: 1px solid #ffffff;
+    border-radius: 8px;
+}
+.offcanvas-body {
+    padding: 8px;
 }
 .offcanvas-header button svg {
     color: #ffffff;
@@ -54,15 +66,15 @@ header {
 .nav-item {
     font-size: 0.95em;
     list-style: none;
-    padding: 20px;
+    padding: 20px 0px;
+    margin: 0px;
     font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-
+    font-weight: bold;
+    text-transform: uppercase;
 }
 .nav-item .active {
     color:#2d2d2e;
-    padding: 5px;
-    font-weight: 100;
+    font-weight: bold;
 }
 .nav-item a {
     text-decoration: none;
@@ -71,27 +83,67 @@ header {
     letter-spacing: 1px;
 }
 .nav-item a:hover {
-    color:#ffffff;
+    opacity: 85%;
+}
+.accordion-item {
+    border: None;
+    display: flex;
+    flex-direction: column;
+}
+.accordion-header {
+    display: inline-block;
+}
+.accordion-button {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px;
+}
+.accordion-button:not(.collapsed) {
+    color: #000000;
+    background-color: #ffffff;
+    box-shadow: None;
+}
+.accordion-body {
+    padding: 0px;
+}
+.productos {
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.productos .nav-item {
+    font-weight: 100;
 }
 .btn svg {
     width: 60px;
     height: 60px;
 }
+.carrito_logo {
+    background-color: #000000;
+    border: None;
+}
+.carrito_logo svg {
+    color: #ffffff;
+}
 .container-search{
     width: 50%;
 }
+.container-search form {
+    text-align: center;
+}
 .container-search form input {
-    height: 3rem;
-    background-color: #dcdfe0;
-    border-color: #626970;
+    height: 2.5rem;
+    background-color: #ffffff;
+    border-color: #000000;
+    border-radius: 15px;
 }
 .container-search form input:focus {
-    background-color: #dcdfe0;
+    background-color: #ffffff;
 }
 .container-search form input::placeholder {
-    color:#626970;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 1.2em;
+    color:#000000;
+    font-size: 1em;
     font-weight: lighter;
 }
 
@@ -324,17 +376,16 @@ a {
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    margin: 60px 0px;
+    margin-bottom: 60px;
 }
 .container-product a {
     text-decoration: none;
-    margin: 20px;
+    margin: 50px 20px;
 }
 .card {
     width: 320px;
     justify-content: flex-start;
     box-sizing: content-box;
-    border: 2px solid #dbdbdb;
 }
 .card-img:hover {
     transition: all .7s;
@@ -362,10 +413,40 @@ a {
     font-family: 'Josefin Sans', sans-serif;
     color: #000000;
     font-size: .95em;
+    margin: 0px;
 }
-
+.btn-añadir-carrito {
+    margin-top: 15px;
+    background-color:#000000;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: .7em;
+    text-transform: uppercase;
+    color: #ffffff;
+    width: 140px;
+    height: 40px;
+    border: 3px solid;
+    border-radius: 30px;
+}
+.btn-añadir-carrito__text {
+    margin: 0px;
+}
+.btn-añadir-carrito:hover {
+    color:#000000;
+    background-color: #ffffff;
+    border-color: #000000;
+    font-weight: bold;
+}
+.btn-añadir-carrito__text:hover {
+    font-weight: bold;
+}
 /* SECCIÓN PRODUCTO */
-
+.productos__title {
+    margin-top: 60px;
+}
+.productos__title .title__nombre {
+    margin: 0px;
+    font-size: 4em;
+}
 .seccion-producto {
     margin: 0;
     padding: 0;
@@ -547,9 +628,6 @@ a {
     .navbar-nav {
         border-bottom: 1px solid #626970;
         border-left: 1px solid #626970;
-    }
-    .carrito {
-        margin-bottom: 60px;
     }
     .container-search{
         width: 100%;
