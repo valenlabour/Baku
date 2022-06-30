@@ -10,7 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet"> <!-- Josefin Sans light 400 -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet"> <!-- Poppins light 300, regular 400 y medium 500 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> <!-- Bootstrap -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/normalize.css">
+
 
 </head>
 <body> 
@@ -31,14 +33,29 @@
                 </button>
                 <div class="offcanvas offcanvas-start" id="navbarOffcanvas"
                 tabindex="-1" aria-labelledby="offcanvasNavbarLabel">
+                
                     <div class="offcanvas-header">
+                        <section class="section-redes">
+                            <div>
+                                <a href="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                                    <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+                                    </svg>
+                                </a>
+                                <a href="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                                        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </section>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
                         </button>
                     </div>
                     <div class="offcanvas-body header-nav">
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a class="active" aria-current="page" href="./index.html">Inicio</a>
+                                <a aria-current="page" href="./index.html">Inicio</a>
                             </li>
                             <li class="accordion-item">
                                 <h2 class="accordion-header" id="flush-headingOne">
@@ -90,20 +107,63 @@
                 </div>
                 <h1 class="logo_header">
                     <a href="./index.html" class="navbar-brand">
-                    <img src="../../img/header/logo_baku.png" alt="Bakú"></a>
+                    <img src="./img/header/logo_baku.png" alt="Bakú"></a>
                 </h1>
                 <button class="carrito_logo" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-bag" viewBox="0 0 16 16">
                         <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
                       </svg>
+                    <span class=" translate-middle badge rounded-pill">
+                        0
+                        <span class="visually-hidden"></span>
+                    </span>
                 </button>
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel">Carrito de Compras</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        <div class="header-carrito">
+                            <h5 class="offcanvas-title " id="offcanvasRightLabel">Carrito de Compras</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
                     </div>
                     <div class="offcanvas-body">
-                        ...
+                        <div class="container-carrito">
+                            <ul class="carrito__productos">
+                                <li class="carrito__producto">
+                                    <div class="producto-img
+                                    ">
+                                        <img src="./img/remeras/remera-arcano.jpg" alt="">
+                                    </div>
+                                    <div class="producto-info">
+                                        <p class="producto-carrito-nombre">Remera Arcano <span class="producto-carrito-talle">(S)</span>
+                                        </p>
+                                        <p class="producto-carrito-precio">
+                                            $3.499
+                                        </p>
+                                        <div class="container-cant-producto">
+                                            <span class="cant-producto__quitar">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                                                  </svg>
+                                            </span>
+                                            <p class="cant-producto__total">3</p>
+                                            <span class="cant-producto__agregar">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                                  </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button class="eliminar-producto-logo">
+                                        <img src="./img/header/eliminar.png" alt="Eliminar Producto">
+                                    </button>
+                                </li>
+                                <div class="carrito__total">
+                                    <p class="total-precio">Total: $3.499</p>
+                                    <p class="total-cuotas">O hasta 3 cuotas sin interés de $1.166</p>
+                                </div>
+                            </ul>
+                        </div>
+                        <!-- <h2 class="carrito_vacio">El carrito está vacío</h2> -->
                     </div>
                 </div>
             </div>
@@ -114,7 +174,6 @@
             </div>
         </nav>
     </header>
-</div>
     <div class="container-destacados">
         <a href="">
             <div class="card col-12 col-md-12 col-lg-12">
@@ -152,7 +211,7 @@
         </div></a>
     </div>
     <section class="section-products">
-        <a class="product" href="./pages/remeras.html">
+        <a class="product collapsed" href="./pages/remeras.html">
             <p class="product__text">Tees</p>
         </a>
         <a class="product" href="#">
@@ -170,8 +229,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
                 <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
             </svg>
-            </div>
-            <a href="#"><h2 class="ig__title">@baku_official</h2></a>
+            <a href="https://www.instagram.com"><h2 class="ig__title">@baku_official</h2></a>
         </div>
         <div class="ig__btn">
             <a class="btn" href="https://www.instagram.com" target="_blank"><p class="btn__text">Seguinos</p></a>
@@ -216,7 +274,7 @@
         <div class="container-fluid">
             <div class="row justify-content-md-center">
                 <div class="col-md-8 text-center">
-                    <div class="newsletter">
+                    <div class="newsletter" id="newsletter">
                         <h2 class="newsletter__title">Recibí todas las ofertas</h2>
                         <p class=" newsletter__description mb-4">¿Querés recibir nuestras ofertas? ¡Registrate ya mismo y comenzá a disfrutarlas!</p>
                         <form class="newsletter__form" method="post">
@@ -224,7 +282,7 @@
                             <div class="form__email" data-component="product.quantity">
                                 <input type="email" id="email" class="form-control" autocorrect="off" autocapitalize="off" name="email" placeholder="Email" aria-label="Email">
                             </div>
-                            <input class="btn btn-primary" type="button" name="btn" id="btn" value="ENVIAR">
+                            <button class="btn btn-primary" id="enviarOfertas">Enviar</button>
                         </form>
                     </div>
                 </div>
@@ -233,7 +291,6 @@
     </section>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script> <!-- Bootstrap JS -->
+    <script src="../js/index.js"></script>
 </body>
 </html>
-
-

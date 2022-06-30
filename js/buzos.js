@@ -3,6 +3,7 @@ numCuotasSinInteres = 3
 let showHoodies = document.getElementById('showBuzos') /* Contenedor de la seccion 'BUZOS' */
 let bodyCarrito = document.getElementById('bodyCarrito')
 
+
 /* CARRITO DE COMPRAS OBJETO */
 class CarritoDeCompras {
     constructor() {
@@ -96,7 +97,7 @@ let alertCarrito = document.createElement("h2")
 alertCarrito.setAttribute("class", "carrito_vacio")
 
 if (!carrito.productos.lenght) {
-    alertCarrito.innerText = ("El carrito está vacío")
+    alertCarrito.innerText = ("El carrito de compras está vacío")
     bodyCarrito.append(alertCarrito)
 }
 
