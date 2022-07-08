@@ -43,7 +43,6 @@ mostrarCarritoVacio()
 function mostrarTodosLosProductos(listaProductos, contenedor) {
     listaProductos.forEach((producto) => {
         const enlace = document.createElement('a')
-        /* enlace.setAttribute('href', `${producto.nombre}.html`) */
         contenedor.append(enlace)
         const card = document.createElement('div')
         card.setAttribute('class', 'card col-12 col-md-12 col-lg-12')
@@ -64,7 +63,22 @@ function mostrarTodosLosProductos(listaProductos, contenedor) {
         let añadirCarrito = document.getElementById(producto.id)
         añadirCarrito.onclick = () => {
             carrito.push(producto)
-            alert(`Agregaste "${producto.nombre}" al carrito`)
+            /* ALERTA PRODUCTO AGREGADO AL CARRITO */
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              Toast.fire({
+                icon: 'success',
+                title: `Agregaste "${producto.nombre}" al carrito"`
+              })
+
             localStorage.setItem('carrito', JSON.stringify(carrito))
             bodyCarrito.innerHTML = ``
             mostrarCarrito()
@@ -99,72 +113,24 @@ function mostrarCarrito() {
                 </div>
                 <div class="producto-info">
                     <p class="producto-carrito-nombre">${producto.nombre}</p>
-                    <p class="producto-carrito-precio">${producto.precio.toLocaleString()}</p>
+                    <p class="producto-carrito-precio">$${producto.precio.toLocaleString()}</p>
                 </div>
                 <button class="eliminar-producto-logo" id=${producto.id}>
                     <img src="../img/header/eliminar.png" alt="Eliminar Producto">
                 </button>
             </li>`
-
-            /* ELIMINAR PRODUCTO
-
-            let prodEliminar = document.getElementById(producto.id)
-            prodEliminar.onclick = () => {
-                if (carrito.cantidadDeProductos == 1) {
-                    bodyCarrito.innerHTML = ``
-                    let alertCarrito = document.createElement("h2")
-                    alertCarrito.setAttribute("class", "carrito_vacio")
-                    alertCarrito.innerText = ("El carrito está vacío")
-                    bodyCarrito.append(alertCarrito)
-                    carrito = new CarritoDeCompras()
-                    cantProductos.innerText = carrito.cantidadDeProductos
-
-                }
-                else {
-                    carritoNuevo = carrito.eliminarProducto(prodEliminar)
-                    bodyCarrito.innerHTML = ``
-                    cantProductos.innerText = carrito.cantidadDeProductos
-                    carritoNuevo.forEach((producto) => {
-                        carritoProductos.innerHTML += `
-                        <li class="carrito__producto">
-                            <div class="producto-img">
-                                <img src=${producto.img} alt=${producto.nombre}>
-                            </div>
-                            <div class="producto-info">
-                                <p class="producto-carrito-nombre">${producto.nombre}</p>
-                                <p class="producto-carrito-precio">${producto.precio.toLocaleString()}</p>
-                            </div>
-                            <button class="eliminar-producto-logo" id=${producto.id}>
-                                <img src="../img/header/eliminar.png" alt="Eliminar Producto">
-                            </button>
-                        </li>`
-                    carrito = carritoNuevo
-                    })
-                }
-            } */
             
             cantProductos.innerText = carrito.length
         })
-    
 
-        // MOSTRAR PRECIO TOTAL
-
-        let total = carrito.reduce((subTotal, producto) => subTotal + producto.precio, 0)
-        let precioPorCuota = Math.trunc((total / numCuotasSinInteres) + (total / numCuotasSinInteres) * 0)
-        let carritoTotal = document.createElement('div')
-        carritoTotal.setAttribute('class', 'carrito__total')
-        carritoTotal.innerHTML += `
-        <p class="total-precio">Total: $${total.toLocaleString()}</p>
-        <p class="total-cuotas">O hasta 3 cuotas sin interés de $${precioPorCuota.toLocaleString()}</p>`
-        containerCarrito.append(carritoTotal)
-
+        
         // VACIAR CARRITO
 
         let vaciarCarrito = document.createElement("button")
         vaciarCarrito.setAttribute('class', 'btn-añadir-carrito')
         vaciarCarrito.innerHTML = `
         <p class=btn-añadir-carrito__text> Vaciar Carrito </p>`
-        bodyCarrito.append(vaciarCarrito)
+        carritoProductos.append(vaciarCarrito)
             
         vaciarCarrito.onclick = () => {
             
@@ -177,25 +143,35 @@ function mostrarCarrito() {
             bodyCarrito.append(alertCarrito)
             cantProductos.innerText = carrito.length
         }
+
+
+        // MOSTRAR PRECIO TOTAL
+
+        let total = carrito.reduce((subTotal, producto) => subTotal + producto.precio, 0)
+        let precioPorCuota = Math.trunc((total / numCuotasSinInteres) + (total / numCuotasSinInteres) * 0)
+        let carritoTotal = document.createElement('div')
+        carritoTotal.setAttribute('class', 'carrito__total')
+        carritoTotal.innerHTML += `
+        <p class="total-precio">Total: $${total.toLocaleString()}</p>
+        <p class="total-cuotas">O hasta 3 cuotas sin interés de $${precioPorCuota.toLocaleString()}</p>`
+        containerCarrito.append(carritoTotal)
+
     }
 }
 
-// MOSTRAR PRODUCTOS FILTRADOS
 
-function mostrarCategoriasFiltrado(categoria) {
-    console.log(productosFiltrados)
-}
+// MOSTRAR PRODUCTOS FILTRADOS
 
 btnVerTodo.onclick = () => {
     showAllShop.innerHTML = ``
     mostrarTodosLosProductos(productos, showAllShop)
 }
+
 btnRemeras.onclick = () => {
     const productosFiltrados = productos.filter((producto) => 'remeras' === producto.categoria)
     showAllShop.innerHTML = ``
     mostrarTodosLosProductos(productosFiltrados, showAllShop)
 }
-
 
 btnBuzos.onclick = () => {
     const productosFiltrados = productos.filter((producto) => 'buzos' === producto.categoria)
