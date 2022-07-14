@@ -276,28 +276,6 @@ button {
     color: #e67e21;
 
 }
-/* BARRA DE BUSQUEDA */
-.container-search{
-    width: 50%;
-}
-.container-search form {
-    text-align: center;
-}
-.container-search form input {
-    height: 2.5rem;
-    background-color: #ffffff;
-    border-color: #000000;
-    border-radius: 15px;
-}
-.container-search form input:focus {
-    background-color: #ffffff;
-}
-.container-search form input::placeholder {
-    color:#000000;
-    font-size: 1em;
-    font-weight: lighter;
-}
-
 /* INICIO */
 
 /* INICIO -DESTACADOS */
@@ -789,10 +767,6 @@ a {
         flex-direction: column;
         width: 50%;
     }
-    .container-search{
-        width: 100%;
-        margin-top: 20px;
-    }
     .descripcion__titulo {
         font-size: 1.3em;
     }
@@ -967,10 +941,18 @@ a {
     .nav-item {
         font-size: 1em;
     }
+    /* HEADER - REDES */
+    .section-redes {
+        padding: 0px 20px;
+    }
     /* HEADER - CARRITO DE COMPRAS */
     .producto-info {
         margin-left: 5px;
         margin-right: 40px;
+    }
+    .close-button {
+        padding: 0px 20px;
+        text-align: right;
     }
     .producto-carrito-nombre {
         text-align: start;

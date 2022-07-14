@@ -1,13 +1,11 @@
 const IVA = 0.21
 numCuotasSinInteres = 3
-let btnVerTodo = document.getElementById('verTodo')
-let btnRemeras = document.getElementById('remeras')
-let btnBuzos = document.getElementById('buzos')
-let btnPantalones = document.getElementById('pantalones')
-let sectionAllShop = document.getElementById('sectionAllShop')
-let showAllShop = document.getElementById('showAllShop') /* Contenedor de la seccion 'PRODUCTOS' */
-let bodyCarrito = document.getElementById('bodyCarrito') /* Contenedor del carrito */
-let cantProductos = document.getElementById('cantProductos') /* Contador Carrito */
+let btnRemeras = document.getElementById('remeras') // Botón filtrar 'REMERAS'
+let btnBuzos = document.getElementById('buzos') // Botón filtrar 'BUZOS'
+let btnPantalones = document.getElementById('pantalones') // Botón filtrar 'PANTALONES'
+let showAllShop = document.getElementById('showAllShop') //Contenedor de la seccion 'PRODUCTOS'
+let bodyCarrito = document.getElementById('bodyCarrito') // Contenedor del carrito
+let cantProductos = document.getElementById('cantProductos') // Contador Carrito
 let carrito;
 let alertCarrito = document.createElement("h2") /* Alerta carrito vacío */
 alertCarrito.setAttribute("class", "carrito_vacio")
@@ -19,13 +17,13 @@ if (JSON.parse(localStorage.getItem('carrito'))) {
     cantProductos.innerText = carrito.length
 }
 else {
-    console.log('hola')
     carrito = []
     localStorage.setItem('carrito', JSON.stringify(carrito))
     carrito = JSON.parse(localStorage.getItem('carrito'))
 }
 
 
+// MOSTRAR CARRITO VACÍO
 function mostrarCarritoVacio() {
 
     if (!carrito.length) {
@@ -38,8 +36,20 @@ function mostrarCarritoVacio() {
 mostrarCarritoVacio()
 
 
-// MOSTRAR TODOS LOS PRODUCTOS
+// PETICIÓN PARA OBTENER PRODUCTOS DISPONIBLES
+const fetchMostrarProductos = () => {
+    fetch('../productos.json').then((response) => response.json())
+    .then((resultado) => {   
+    mostrarTodosLosProductos(resultado.productos, showAllShop)
+    }).catch((error) => {
+        console.error(error)
+    })
+}
 
+fetchMostrarProductos()
+
+
+// MOSTRAR TODOS LOS PRODUCTOS
 function mostrarTodosLosProductos(listaProductos, contenedor) {
     listaProductos.forEach((producto) => {
         const enlace = document.createElement('a')
@@ -57,44 +67,52 @@ function mostrarTodosLosProductos(listaProductos, contenedor) {
             </button>
         </div>`
 
-        // AÑADIR PRODUCTO AL CARRITO
-
         enlace.append(card)
-        let añadirCarrito = document.getElementById(producto.id)
-        añadirCarrito.onclick = () => {
-            carrito.push(producto)
-            /* ALERTA PRODUCTO AGREGADO AL CARRITO */
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000,
-                didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-              })
-              Toast.fire({
-                icon: 'success',
-                title: `Agregaste "${producto.nombre}" al carrito"`
-              })
 
-            localStorage.setItem('carrito', JSON.stringify(carrito))
-            bodyCarrito.innerHTML = ``
-            mostrarCarrito()
-        }
+
+        // AÑADIR PRODUCTO AL CARRITO
+        let añadirCarrito = document.getElementById(producto.id)
+        añadirProductoAlCarrito(añadirCarrito, producto)
     })
 
 }
 
-mostrarTodosLosProductos(productos, showAllShop)
 
-// MOSTRAR CARRITO DE COMPRAS
+// AÑADIR PRODUCTO AL CARRITO
+function añadirProductoAlCarrito(btnAñadirCarrito, producto) {
+    btnAñadirCarrito.onclick = () => {
+        carrito.push(producto)
+        // ALERTA PRODUCTO AGREGADO
+        alertaProductoAgregadoCarrito(producto.nombre)
+        localStorage.setItem('carrito', JSON.stringify(carrito))
+        bodyCarrito.innerHTML = ``
+        mostrarCarrito()
+    }
+}
 
+// ALERTA PRODUCTO AGREGADO AL CARRITO
+function alertaProductoAgregadoCarrito(nombreProducto) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+      Toast.fire({
+        icon: 'success',
+        title: `Agregaste "${nombreProducto}" al carrito"`
+      })
+}
 
 mostrarCarritoVacio()
 mostrarCarrito()
 
+
+// MOSTRAR CARRITO DE COMPRAS
 function mostrarCarrito() {
     if (carrito.length != 0) {
         alertCarrito.remove()
@@ -123,64 +141,90 @@ function mostrarCarrito() {
             cantProductos.innerText = carrito.length
         })
 
-        
-        // VACIAR CARRITO
+        vaciarCarrito()
 
-        let vaciarCarrito = document.createElement("button")
-        vaciarCarrito.setAttribute('class', 'btn-añadir-carrito')
-        vaciarCarrito.innerHTML = `
-        <p class=btn-añadir-carrito__text> Vaciar Carrito </p>`
-        carritoProductos.append(vaciarCarrito)
+        mostrarPrecioTotal(carrito, numCuotasSinInteres)
+    }
+}
+
+// VACIAR CARRITO
+function vaciarCarrito() {
+    let vaciarCarrito = document.createElement("button")
+    vaciarCarrito.setAttribute('class', 'btn-añadir-carrito')
+    vaciarCarrito.innerHTML = `
+    <p class=btn-añadir-carrito__text> Vaciar Carrito </p>`
+    carritoProductos.append(vaciarCarrito)
             
-        vaciarCarrito.onclick = () => {
+    vaciarCarrito.onclick = () => {
             
-            carrito = []
-            localStorage.setItem('carrito', JSON.stringify(carrito))
-            bodyCarrito.innerHTML = ``
-            let alertCarrito = document.createElement("h2")
-            alertCarrito.setAttribute("class", "carrito_vacio")
-            alertCarrito.innerText = ("El carrito está vacío")
-            bodyCarrito.append(alertCarrito)
-            cantProductos.innerText = carrito.length
-        }
-
-
-        // MOSTRAR PRECIO TOTAL
-
-        let total = carrito.reduce((subTotal, producto) => subTotal + producto.precio, 0)
-        let precioPorCuota = Math.trunc((total / numCuotasSinInteres) + (total / numCuotasSinInteres) * 0)
-        let carritoTotal = document.createElement('div')
-        carritoTotal.setAttribute('class', 'carrito__total')
-        carritoTotal.innerHTML += `
-        <p class="total-precio">Total: $${total.toLocaleString()}</p>
-        <p class="total-cuotas">O hasta 3 cuotas sin interés de $${precioPorCuota.toLocaleString()}</p>`
-        containerCarrito.append(carritoTotal)
-
+        carrito = []
+        localStorage.setItem('carrito', JSON.stringify(carrito))
+        bodyCarrito.innerHTML = ``
+        let alertCarrito = document.createElement("h2")
+        alertCarrito.setAttribute("class", "carrito_vacio")
+        alertCarrito.innerText = ("El carrito está vacío")
+        bodyCarrito.append(alertCarrito)
+        cantProductos.innerText = carrito.length
     }
 }
 
 
-// MOSTRAR PRODUCTOS FILTRADOS
 
+// MOSTRAR PRECIO TOTAL
+function mostrarPrecioTotal(carrito, numCuotasSinInteres) {
+    const [total, precioPorCuota] = calcularPrecioTotal(carrito, numCuotasSinInteres)
+    let carritoTotal = document.createElement('div')
+    carritoTotal.setAttribute('class', 'carrito__total')
+    carritoTotal.innerHTML += `
+    <p class="total-precio">Total: $${total.toLocaleString()}</p>
+    <p class="total-cuotas">O hasta 3 cuotas sin interés de $${precioPorCuota.toLocaleString()}</p>`
+    containerCarrito.append(carritoTotal)
+}
+
+
+// CALCULAR PRECIO TOTAL
+function calcularPrecioTotal(carrito, numCuotasSinInteres) { 
+    let total = carrito.reduce((subTotal, producto) => subTotal + producto.precio, 0)
+    let precioPorCuota = Math.trunc((total / numCuotasSinInteres) + (total / numCuotasSinInteres) * 0)
+    return [total, precioPorCuota]
+}
+
+// OBTENER PRODUCTOS FILTRADOS
+const fetchProductosFiltrados = (categoria) => {
+    fetch('../productos.json').then((response) => response.json())
+    .then((resultado) => {
+        const productosFiltrados = filtrarCategoria(resultado.productos, categoria)
+        mostrarTodosLosProductos(productosFiltrados, showAllShop)
+    }).catch((error) => {
+        console.error(error)
+    })
+}
+
+
+// FILTRAR POR CATEGORIA
+function filtrarCategoria(listaProductos, categoria) {
+    const productosFiltrados = listaProductos.filter((producto) => categoria === producto.categoria)
+    return productosFiltrados
+}
+
+
+// BOTONES FILTRADO
 btnVerTodo.onclick = () => {
     showAllShop.innerHTML = ``
-    mostrarTodosLosProductos(productos, showAllShop)
+    fetchMostrarProductos()
 }
 
 btnRemeras.onclick = () => {
-    const productosFiltrados = productos.filter((producto) => 'remeras' === producto.categoria)
     showAllShop.innerHTML = ``
-    mostrarTodosLosProductos(productosFiltrados, showAllShop)
+    fetchProductosFiltrados('remeras')
 }
 
 btnBuzos.onclick = () => {
-    const productosFiltrados = productos.filter((producto) => 'buzos' === producto.categoria)
     showAllShop.innerHTML = ``
-    mostrarTodosLosProductos(productosFiltrados, showAllShop)
+    fetchProductosFiltrados('buzos')
 }
 
 btnPantalones.onclick = () => {
-    const productosFiltrados = productos.filter((producto) => 'pantalones' === producto.categoria)
     showAllShop.innerHTML = ``
-    mostrarTodosLosProductos(productosFiltrados, showAllShop)
+    fetchProductosFiltrados('pantalones')
 }

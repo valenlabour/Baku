@@ -1,21 +1,19 @@
 const IVA = 0.21
 numCuotasSinInteres = 3
-let bodyCarrito = document.getElementById('bodyCarrito') /* Contenedor del carrito */
-let cantProductos = document.getElementById('cantProductos') /* Contador Carrito */
-let alertCarrito = document.createElement("h2") /* Alerta carrito vacío */
+let bodyCarrito = document.getElementById('bodyCarrito') // Contenedor del carrito
+let cantProductos = document.getElementById('cantProductos') // Contador Carrito
+let alertCarrito = document.createElement("h2") // Alerta carrito vacío
 alertCarrito.setAttribute("class", "carrito_vacio")
 let newsletter = document.getElementById('newsletter')
 let listaUsuarios;
 
 
 // VERIFICACIÓN DE CARRITO EN LOCALSTORAGE
-
 if (JSON.parse(localStorage.getItem('carrito'))) {
     carrito = JSON.parse(localStorage.getItem('carrito'))
     cantProductos.innerText = carrito.length
 }
 else {
-    console.log('hola')
     carrito = []
     localStorage.setItem('carrito', JSON.stringify(carrito))
     carrito = JSON.parse(localStorage.getItem('carrito'))
@@ -23,7 +21,6 @@ else {
 
 
 // VERIFICACIÓN DE USUARIOS SUSCRIPTOS
-
 if (JSON.parse(localStorage.getItem('listaUsuarios'))) {
     listaUsuarios = JSON.parse(localStorage.getItem('listaUsuarios'))
 }
@@ -57,61 +54,71 @@ function mostrarCarrito() {
             carritoProductos.innerHTML += `
             <li class="carrito__producto">
                 <div class="producto-img">
-                    <img src=${producto.img} alt=${producto.nombre}>
+                    <img src=${producto.img.slice(1)} alt=${producto.nombre}>
                 </div>
                 <div class="producto-info">
                     <p class="producto-carrito-nombre">${producto.nombre}</p>
                     <p class="producto-carrito-precio">$${producto.precio.toLocaleString()}</p>
                 </div>
                 <button class="eliminar-producto-logo" id=${producto.id}>
-                    <img src="../img/header/eliminar.png" alt="Eliminar Producto">
+                    <img src="./img/header/eliminar.png" alt="Eliminar Producto">
                 </button>
             </li>`
             
             cantProductos.innerText = carrito.length
         })
         
+        vaciarCarrito()
 
-        // VACIAR CARRITO
-
-        let vaciarCarrito = document.createElement("button")
-        vaciarCarrito.setAttribute('class', 'btn-añadir-carrito')
-        vaciarCarrito.innerHTML = `
-        <p class=btn-añadir-carrito__text> Vaciar Carrito </p>`
-        carritoProductos.append(vaciarCarrito)
-            
-        vaciarCarrito.onclick = () => {
-            
-            carrito = []
-            localStorage.setItem('carrito', JSON.stringify(carrito))
-            bodyCarrito.innerHTML = ``
-            let alertCarrito = document.createElement("h2")
-            alertCarrito.setAttribute("class", "carrito_vacio")
-            alertCarrito.innerText = ("El carrito está vacío")
-            bodyCarrito.append(alertCarrito)
-            cantProductos.innerText = carrito.length
-        }
-
-
-        // MOSTRAR PRECIO TOTAL
-
-        let total = carrito.reduce((subTotal, producto) => subTotal + producto.precio, 0)
-        let precioPorCuota = Math.trunc((total / numCuotasSinInteres) + (total / numCuotasSinInteres) * 0)
-        let carritoTotal = document.createElement('div')
-        carritoTotal.setAttribute('class', 'carrito__total')
-        carritoTotal.innerHTML += `
-        <p class="total-precio">Total: $${total.toLocaleString()}</p>
-        <p class="total-cuotas">O hasta 3 cuotas sin interés de $${precioPorCuota.toLocaleString()}</p>`
-        
-        containerCarrito.append(carritoTotal)
+        mostrarPrecioTotal(carrito, numCuotasSinInteres)
     }
 }
 
 mostrarCarrito()
 
 
-// ENVIAR OFERTAS POR MAIL
+// VACIAR CARRITO
+function vaciarCarrito() {
+    let vaciarCarrito = document.createElement("button")
+    vaciarCarrito.setAttribute('class', 'btn-añadir-carrito')
+    vaciarCarrito.innerHTML = `
+    <p class=btn-añadir-carrito__text> Vaciar Carrito </p>`
+    carritoProductos.append(vaciarCarrito)
+            
+    vaciarCarrito.onclick = () => {
+            
+        carrito = []
+        localStorage.setItem('carrito', JSON.stringify(carrito))
+        bodyCarrito.innerHTML = ``
+        let alertCarrito = document.createElement("h2")
+        alertCarrito.setAttribute("class", "carrito_vacio")
+        alertCarrito.innerText = ("El carrito está vacío")
+        bodyCarrito.append(alertCarrito)
+        cantProductos.innerText = carrito.length
+    }
+}
 
+
+// MOSTRAR PRECIO TOTAL
+function mostrarPrecioTotal(carrito, numCuotasSinInteres) {
+    const [total, precioPorCuota] = calcularPrecioTotal(carrito, numCuotasSinInteres)
+    let carritoTotal = document.createElement('div')
+    carritoTotal.setAttribute('class', 'carrito__total')
+    carritoTotal.innerHTML += `
+    <p class="total-precio">Total: $${total.toLocaleString()}</p>
+    <p class="total-cuotas">O hasta 3 cuotas sin interés de $${precioPorCuota.toLocaleString()}</p>`
+    containerCarrito.append(carritoTotal)
+}
+
+
+// CALCULAR PRECIO TOTAL
+function calcularPrecioTotal(carrito, numCuotasSinInteres) { 
+    let total = carrito.reduce((subTotal, producto) => subTotal + producto.precio, 0)
+    let precioPorCuota = Math.trunc((total / numCuotasSinInteres) + (total / numCuotasSinInteres) * 0)
+    return [total, precioPorCuota]
+}
+
+// ENVIAR OFERTAS POR MAIL
 function enviarOfertas(listaUsuarios) {
     let email = document.getElementById('email')
     let usuario = email.value
@@ -144,16 +151,16 @@ function enviarOfertas(listaUsuarios) {
 
 btnEnviarOfertas = document.getElementById('enviarOfertas')
 
+
+// BOTÓN ENVIAR OFERTAS
 btnEnviarOfertas.onclick = (e) => {
     e.preventDefault()
     enviarOfertas(listaUsuarios)
-    console.log(listaUsuarios)
     localStorage.setItem('listaUsuarios', JSON.stringify(listaUsuarios))
 }
 
 
 // MOSTRAR ALERTA DE MAIL
-
 function mostrarAlertaMail(texto, logo) {
     const Toast = Swal.mixin({
         toast: true,
