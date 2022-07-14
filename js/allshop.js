@@ -1,5 +1,6 @@
 const IVA = 0.21
 numCuotasSinInteres = 3
+let btnVerTodo = document.getElementById('verTodo') // Botón filtrar 'VER TODO'
 let btnRemeras = document.getElementById('remeras') // Botón filtrar 'REMERAS'
 let btnBuzos = document.getElementById('buzos') // Botón filtrar 'BUZOS'
 let btnPantalones = document.getElementById('pantalones') // Botón filtrar 'PANTALONES'
