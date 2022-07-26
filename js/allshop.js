@@ -308,7 +308,9 @@ function mostrarCarrito() {
         containerCarrito.append(carritoProductos)
         bodyCarrito.append(containerCarrito)
         carrito.forEach((productos) => {
-            let [producto, cantidad, talle] = productos
+            let producto = productos[0]
+            let cantidad = productos[1]
+            let talle = productos[2]
             carritoProductos.innerHTML += `
             <li class="carrito__producto">
                 <div class="producto-img">
