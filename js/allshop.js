@@ -209,6 +209,7 @@ function sumarUnidadAlCarrito(listaProductos) {
                 for (const productos of carrito) {
                     if (((productos[0].id == idProductoSeleccionado) && (talleSeleccionado == productos[2]))) {
                         productos[1] += 1
+                        localStorage.setItem('carrito', JSON.stringify(carrito))
                         mostrarCarrito()
                     }
                 }
@@ -253,6 +254,7 @@ function eliminarUnidadDelCarrito(carrito, cantProductos) {
                 if ((productos[0].id == idProducto) && (productos[2] == talleSeleccionado)) {
                     if ((productos[1] - 1) > 0) {
                         productos[1] -= 1
+                        localStorage.setItem('carrito', JSON.stringify(carrito))
                         mostrarCarrito()
                         return
                     }
@@ -309,7 +311,6 @@ function mostrarCarrito() {
             let producto = productos[0]
             let cantidad = productos[1]
             let talle = productos[2]
-            console.log(producto)
             carritoProductos.innerHTML += `
             <li class="carrito__producto">
                 <div class="producto-img">
