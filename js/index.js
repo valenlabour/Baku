@@ -18,7 +18,7 @@ else {
     localStorage.setItem('carrito', JSON.stringify(carrito))
     carrito = JSON.parse(localStorage.getItem('carrito'))
 }
-
+localStorage.clear()
 // VACIAR LOCALSTORAGE
 function vaciarLocalStorage() {
     carrito = []
