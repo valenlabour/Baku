@@ -137,17 +137,15 @@ function añadirProductoAlCarrito(btnAñadirCarrito, productoSeleccionado, lista
         let cantProductoSeleccionado = 1
         if (carrito.length != 0) {
             for (const productos of carrito) {
-                let [producto, cantidad, talle] = productos
-                if ((producto == productoSeleccionado) && (talle == talleSeleccionado)) {
-                    cantProductoSeleccionado = cantidad
+                if ((productos[0] == productoSeleccionado) && (productos[2] == talleSeleccionado)) {
+                    cantProductoSeleccionado = productos[1]
                 }
             }
         }
         if (hayStock(talleSeleccionado, idProductoSeleccionado, listaProductos, cantProductoSeleccionado)) {
             for (const productos of carrito) {
-                let [producto, cantidad, talle] = productos
-                if ((producto == productoSeleccionado) && (talle == talleSeleccionado)) {
-                    cantidad += 1
+                if ((productos[0] == productoSeleccionado) && (productos[2] == talleSeleccionado)) {
+                    productos[1] += 1
     
                     // ALERTA PRODUCTO AGREGADO
                     alertaProductoAgregadoCarrito(productoSeleccionado.nombre)
@@ -311,6 +309,7 @@ function mostrarCarrito() {
             let producto = productos[0]
             let cantidad = productos[1]
             let talle = productos[2]
+            console.log(producto)
             carritoProductos.innerHTML += `
             <li class="carrito__producto">
                 <div class="producto-img">
