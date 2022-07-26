@@ -190,7 +190,7 @@ function mostrarCarrito() {
             carritoProductos.innerHTML += `
             <li class="carrito__producto">
                 <div class="producto-img">
-                    <img src=${producto.img} alt=${producto.nombre}>
+                    <img src=${producto.img.slice(1)} alt=${producto.nombre}>
                 </div>
                 <div class="producto-info">
                     <p class="producto-carrito-nombre">${producto.nombre} <span class="producto-carrito-talle">(${talle})</span></p>
@@ -210,7 +210,7 @@ function mostrarCarrito() {
                     </div>
                 </div>
                 <button class="eliminar-producto-logo">
-                    <img src="../img/header/eliminar.png" class="img-eliminar-producto" id=${talle}${producto.id} alt="Eliminar Producto">
+                    <img src="./img/header/eliminar.png" class="img-eliminar-producto" id=${talle}${producto.id} alt="Eliminar Producto">
                 </button>
             </li>`
             cantProductos.innerText = carrito.reduce((subCantidad, productos) => subCantidad + productos[1], 0)
