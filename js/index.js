@@ -83,7 +83,7 @@ function alertStock() {
 // VERIFICAR STOCK PRODUCTO YA EN CARRITO 
 
 function verificarStockYaEnCarrito() {
-    fetch('../productos.json').then((response) => response.json())
+    fetch('./productos.json').then((response) => response.json())
     .then((resultado) => {
         sumarUnidadAlCarrito(resultado.productos)
     }).catch((error) => {
