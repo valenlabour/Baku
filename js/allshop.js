@@ -23,6 +23,15 @@ else {
     carrito = JSON.parse(localStorage.getItem('carrito'))
 }
 
+// VACIAR LOCALSTORAGE
+function vaciarLocalStorage() {
+    carrito = []
+        localStorage.setItem('carrito', JSON.stringify(carrito))
+        bodyCarrito.innerHTML = ``
+        cantProductos.innerText = carrito.length
+        mostrarCarritoVacio()
+}
+
 
 // MOSTRAR CARRITO VACÍO
 function mostrarCarritoVacio() {
@@ -63,31 +72,204 @@ function mostrarTodosLosProductos(listaProductos, contenedor) {
             <p class=card-title> ${producto.nombre} </p>
             <p class=card-cost> $${producto.precio.toLocaleString()} </p>
             <p class=card-text> <strong> ${numCuotasSinInteres} </strong> cuotas sin interés <strong>$${Math.trunc(producto.precio / numCuotasSinInteres)}</strong></p>
-            <button class=btn-añadir-carrito id=${producto.id}>
-                <p class=btn-añadir-carrito__text> Añadir al carrito </p>
-            </button>
+            <div class=seleccionar-producto>
+                <button class=btn-añadir-carrito id=${producto.id}>
+                    <p class=btn-añadir-carrito__text> Agregar al carrito </p>
+                </button>
+                <form class="talle">
+                    <select class="form-select form-select-sm talle__caja" id=t${producto.id} aria-label=".form-select-sm example">
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select>
+                </form>
+            </div>
         </div>`
 
         enlace.append(card)
 
 
         // AÑADIR PRODUCTO AL CARRITO
-        let añadirCarrito = document.getElementById(producto.id)
-        añadirProductoAlCarrito(añadirCarrito, producto)
+        let btnAñadirCarrito = document.getElementById(producto.id)
+        verificarStock(btnAñadirCarrito, producto)
     })
 
 }
 
 
-// AÑADIR PRODUCTO AL CARRITO
-function añadirProductoAlCarrito(btnAñadirCarrito, producto) {
+// VERIFICAR STOCK 
+function verificarStock(btnAñadirCarrito, productoSeleccionado) {
+    fetch('../productos.json').then((response) => response.json())
+    .then((resultado) => {
+        añadirProductoAlCarrito(btnAñadirCarrito, productoSeleccionado, resultado.productos)
+    }).catch((error) => {
+        console.error(error)
+    })
+}
+
+function hayStock(talleSeleccionado, idProductoSeleccionado, listaProductos, cantProductoSeleccionado) {
+    for (const producto of listaProductos) {
+        if (producto.id === idProductoSeleccionado) {
+            switch(talleSeleccionado){
+                case 'S':
+                return ((producto.stock[0] - cantProductoSeleccionado) > 0)
+
+                case 'M':
+                return ((producto.stock[1] - cantProductoSeleccionado) > 0)
+            
+                case 'L':
+                return ((producto.stock[2] - cantProductoSeleccionado) > 0)
+
+                case 'XL':
+                return ((producto.stock[3] - cantProductoSeleccionado) > 0) 
+            }
+        }
+    }
+}
+
+// AÑADIR NUEVO PRODUCTO AL CARRITO
+function añadirProductoAlCarrito(btnAñadirCarrito, productoSeleccionado, listaProductos) {
     btnAñadirCarrito.onclick = () => {
-        carrito.push(producto)
-        // ALERTA PRODUCTO AGREGADO
-        alertaProductoAgregadoCarrito(producto.nombre)
-        localStorage.setItem('carrito', JSON.stringify(carrito))
-        bodyCarrito.innerHTML = ``
-        mostrarCarrito()
+        let talle = document.getElementById(`t${productoSeleccionado.id}`)
+        let talleSeleccionado = talle.value
+        let idProductoSeleccionado = productoSeleccionado.id
+        let cantProductoSeleccionado = 1
+        if (carrito.length != 0) {
+            for (const productos of carrito) {
+                let [producto, cantidad, talle] = productos
+                if ((producto == productoSeleccionado) && (talle == talleSeleccionado)) {
+                    cantProductoSeleccionado = cantidad
+                }
+            }
+        }
+        if (hayStock(talleSeleccionado, idProductoSeleccionado, listaProductos, cantProductoSeleccionado)) {
+            for (const productos of carrito) {
+                let [producto, cantidad, talle] = productos
+                if ((producto == productoSeleccionado) && (talle == talleSeleccionado)) {
+                    cantidad += 1
+    
+                    // ALERTA PRODUCTO AGREGADO
+                    alertaProductoAgregadoCarrito(productoSeleccionado.nombre)
+                    localStorage.setItem('carrito', JSON.stringify(carrito))
+                    bodyCarrito.innerHTML = ``
+                    mostrarCarrito()
+                    return
+                }
+            }
+            productoASumar = [productoSeleccionado, 1, talleSeleccionado]
+            carrito.push(productoASumar)
+    
+            // ALERTA PRODUCTO AGREGADO
+            alertaProductoAgregadoCarrito(productoSeleccionado.nombre)
+            localStorage.setItem('carrito', JSON.stringify(carrito))
+            bodyCarrito.innerHTML = ``
+            mostrarCarrito()
+        }
+        else {
+            alertStock()
+        }
+    }
+}
+
+// ALERTA STOCK
+
+function alertStock() {
+    Swal.fire({
+        title: '¡Uy!',
+        text: 'No tenemos más stock de este producto para agregarlo al carrito',
+        imageUrl: '../img/logos/alert-stock.png'
+      })
+}
+
+// VERIFICAR STOCK PRODUCTO YA EN CARRITO 
+
+function verificarStockYaEnCarrito() {
+    fetch('../productos.json').then((response) => response.json())
+    .then((resultado) => {
+        sumarUnidadAlCarrito(resultado.productos)
+    }).catch((error) => {
+        console.error(error)
+    })
+}
+
+// AÑADIR PRODUCTO YA EN CARRITO
+function sumarUnidadAlCarrito(listaProductos) {
+    let botonesSumarUnidad = document.getElementsByClassName('cant-producto__agregar')
+    for (const boton of botonesSumarUnidad) {
+        boton.onclick = (e) => {
+            id = e.currentTarget.id
+            talleSeleccionado = id.slice(0, 1)
+            idProductoSeleccionado = id.slice(1)
+            for (const productos of carrito) {
+                if ((productos[0].id == idProductoSeleccionado) && (talleSeleccionado == productos[2])) {
+                    cantProductoSeleccionado = productos[1]
+                    talleSeleccionado = productos[2]
+                }
+            }
+            if (hayStock(talleSeleccionado, idProductoSeleccionado, listaProductos, cantProductoSeleccionado)) {
+                for (const productos of carrito) {
+                    if (((productos[0].id == idProductoSeleccionado) && (talleSeleccionado == productos[2]))) {
+                        productos[1] += 1
+                        mostrarCarrito()
+                    }
+                }
+            }
+            else {
+                alertStock()
+            }
+        }
+    }
+}
+
+// ELIMINAR PRODUCTO DE CARRITO
+function eliminarProductoCarrito(carrito, cantProductos) {
+    let botonesEliminarProducto = document.getElementsByClassName('img-eliminar-producto')
+    for (const boton of botonesEliminarProducto) {
+        boton.onclick = (e) => {
+            id = e.currentTarget.id
+            talleSeleccionado = id.slice(0, 1)
+            idProducto = id.slice(1)
+            const productoAEliminar = carrito.find((productos) => ((idProducto == productos[0].id) && (talleSeleccionado == productos[2])))
+            idx = carrito.indexOf(productoAEliminar)
+            carrito.splice(idx, 1)
+            bodyCarrito.innerHTML = ``
+            cantProductos.innerText = carrito.length
+            localStorage.setItem('carrito', JSON.stringify(carrito))
+            mostrarCarritoVacio()
+            mostrarCarrito()
+        }
+    }
+}
+
+
+// ELIMINAR UNIDAD DE CARRITO 
+function eliminarUnidadDelCarrito(carrito, cantProductos) {
+    let botonesQuitarUnidad = document.getElementsByClassName('cant-producto__quitar')
+    for (const boton of botonesQuitarUnidad) {
+        boton.onclick = (e) => {
+            id = e.currentTarget.id
+            talleSeleccionado = id.slice(0, 1)
+            idProducto = id.slice(1)
+            for (const productos of carrito) {
+                if ((productos[0].id == idProducto) && (productos[2] == talleSeleccionado)) {
+                    if ((productos[1] - 1) > 0) {
+                        productos[1] -= 1
+                        mostrarCarrito()
+                        return
+                    }
+                    else {
+                        idx = carrito.indexOf(productos)
+                        carrito.splice(idx, 1)
+                        bodyCarrito.innerHTML = ``
+                        cantProductos.innerText = carrito.length
+                        localStorage.setItem('carrito', JSON.stringify(carrito))
+                        mostrarCarritoVacio()
+                        mostrarCarrito()
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -117,6 +299,7 @@ mostrarCarrito()
 function mostrarCarrito() {
     if (carrito.length != 0) {
         alertCarrito.remove()
+        bodyCarrito.innerHTML = ``
         containerCarrito = document.createElement('div')
         containerCarrito.setAttribute('class', 'container-carrito')
         carritoProductos = document.createElement('ul')
@@ -124,27 +307,44 @@ function mostrarCarrito() {
         carritoProductos.setAttribute('id', 'carritoProductos')
         containerCarrito.append(carritoProductos)
         bodyCarrito.append(containerCarrito)
-        carrito.forEach((producto) => {
+        carrito.forEach((productos) => {
+            let [producto, cantidad, talle] = productos
             carritoProductos.innerHTML += `
             <li class="carrito__producto">
                 <div class="producto-img">
                     <img src=${producto.img} alt=${producto.nombre}>
                 </div>
                 <div class="producto-info">
-                    <p class="producto-carrito-nombre">${producto.nombre}</p>
+                    <p class="producto-carrito-nombre">${producto.nombre} <span class="producto-carrito-talle">(${talle})</span></p>
                     <p class="producto-carrito-precio">$${producto.precio.toLocaleString()}</p>
+                    <div class="container-cant-producto">
+                        <span class="cant-producto__quitar" id=${talle}${producto.id}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                            </svg>
+                        </span>
+                        <p class="cant-producto__total">${cantidad}</p>
+                        <span class="cant-producto__agregar" id=${talle}${producto.id}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                </svg>
+                            </span>
+                    </div>
                 </div>
-                <button class="eliminar-producto-logo" id=${producto.id}>
-                    <img src="../img/header/eliminar.png" alt="Eliminar Producto">
+                <button class="eliminar-producto-logo">
+                    <img src="../img/header/eliminar.png" class="img-eliminar-producto" id=${talle}${producto.id} alt="Eliminar Producto">
                 </button>
             </li>`
-            
-            cantProductos.innerText = carrito.length
+            cantProductos.innerText = carrito.reduce((subCantidad, productos) => subCantidad + productos[1] , 0)
+            verificarStockYaEnCarrito()
+            if (carrito.length != 0) {
+                eliminarUnidadDelCarrito(carrito, cantProductos)
+                eliminarProductoCarrito(carrito, cantProductos)
+            }
         })
-
         vaciarCarrito()
-
         mostrarPrecioTotal(carrito, numCuotasSinInteres)
+        iniciarCompra()
     }
 }
 
@@ -157,15 +357,7 @@ function vaciarCarrito() {
     carritoProductos.append(vaciarCarrito)
             
     vaciarCarrito.onclick = () => {
-            
-        carrito = []
-        localStorage.setItem('carrito', JSON.stringify(carrito))
-        bodyCarrito.innerHTML = ``
-        let alertCarrito = document.createElement("h2")
-        alertCarrito.setAttribute("class", "carrito_vacio")
-        alertCarrito.innerText = ("El carrito está vacío")
-        bodyCarrito.append(alertCarrito)
-        cantProductos.innerText = carrito.length
+            vaciarLocalStorage()
     }
 }
 
@@ -185,10 +377,29 @@ function mostrarPrecioTotal(carrito, numCuotasSinInteres) {
 
 // CALCULAR PRECIO TOTAL
 function calcularPrecioTotal(carrito, numCuotasSinInteres) { 
-    let total = carrito.reduce((subTotal, producto) => subTotal + producto.precio, 0)
+    let total = carrito.reduce((subTotal, producto) => subTotal + (producto[0].precio * producto[1]), 0)
     let precioPorCuota = Math.trunc((total / numCuotasSinInteres) + (total / numCuotasSinInteres) * 0)
     return [total, precioPorCuota]
 }
+
+// INICIAR COMPRA
+function iniciarCompra() {
+    let iniciarCompra = document.createElement("button")
+    iniciarCompra.setAttribute('class', 'btn-iniciar-compra')
+    iniciarCompra.innerHTML = `
+    <p class=btn-iniciar-compra__text> Iniciar compra </p>`
+    containerCarrito.append(iniciarCompra)
+
+    iniciarCompra.onclick = () => {
+        Swal.fire(
+            '¡Listo!',
+            `Te agradecemos por comprar en nuestra tienda. Pronto nos pondremos en contacto para que puedas recibir tu pedido.`,
+            'success'
+        )
+        vaciarLocalStorage()
+    }
+}
+
 
 // OBTENER PRODUCTOS FILTRADOS
 const fetchProductosFiltrados = (categoria) => {

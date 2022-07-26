@@ -19,6 +19,15 @@ else {
     carrito = JSON.parse(localStorage.getItem('carrito'))
 }
 
+// VACIAR LOCALSTORAGE
+function vaciarLocalStorage() {
+    carrito = []
+        localStorage.setItem('carrito', JSON.stringify(carrito))
+        bodyCarrito.innerHTML = ``
+        cantProductos.innerText = carrito.length
+        mostrarCarritoVacio()
+}
+
 
 // VERIFICACIÓN DE USUARIOS SUSCRIPTOS
 if (JSON.parse(localStorage.getItem('listaUsuarios'))) {
@@ -40,9 +49,133 @@ function mostrarCarritoVacio() {
 
 mostrarCarritoVacio()
 
+
+// VERIFICAR STOCK 
+function hayStock(talleSeleccionado, idProductoSeleccionado, listaProductos, cantProductoSeleccionado) {
+    for (const producto of listaProductos) {
+        if (producto.id === idProductoSeleccionado) {
+            if (talleSeleccionado == 'S') {
+                return ((producto.stock[0] - cantProductoSeleccionado) > 0)
+            }
+            else if (talleSeleccionado == 'M') {
+                return ((producto.stock[1] - cantProductoSeleccionado) > 0) 
+            }
+            else if (talleSeleccionado == 'L') {
+                return ((producto.stock[2] - cantProductoSeleccionado) > 0) 
+            }
+            else {
+                return ((producto.stock[3] - cantProductoSeleccionado) > 0) 
+            }
+        }
+    }
+}
+
+// ALERTA STOCK
+
+function alertStock() {
+    Swal.fire({
+        title: '¡Uy!',
+        text: 'No tenemos más stock de este producto para agregarlo al carrito',
+        imageUrl: '../img/logos/alert-stock.png'
+      })
+}
+
+// VERIFICAR STOCK PRODUCTO YA EN CARRITO 
+
+function verificarStockYaEnCarrito() {
+    fetch('../productos.json').then((response) => response.json())
+    .then((resultado) => {
+        sumarUnidadAlCarrito(resultado.productos)
+    }).catch((error) => {
+        console.error(error)
+    })
+}
+
+// AÑADIR PRODUCTO YA EN CARRITO
+function sumarUnidadAlCarrito(listaProductos) {
+    let botonesSumarUnidad = document.getElementsByClassName('cant-producto__agregar')
+    for (const boton of botonesSumarUnidad) {
+        boton.onclick = (e) => {
+            id = e.currentTarget.id
+            talleSeleccionado = id.slice(0, 1)
+            idProductoSeleccionado = id.slice(1)
+            for (const productos of carrito) {
+                if ((productos[0].id == idProductoSeleccionado) && (talleSeleccionado == productos[2])) {
+                    cantProductoSeleccionado = productos[1]
+                    talleSeleccionado = productos[2]
+                }
+            }
+            if (hayStock(talleSeleccionado, idProductoSeleccionado, listaProductos, cantProductoSeleccionado)) {
+                for (const productos of carrito) {
+                    if (((productos[0].id == idProductoSeleccionado) && (talleSeleccionado == productos[2]))) {
+                        productos[1] += 1
+                        mostrarCarrito()
+                    }
+                }
+            }
+            else {
+                alertStock()
+            }
+        }
+    }
+}
+
+// ELIMINAR PRODUCTO DE CARRITO
+function eliminarProductoCarrito(carrito, cantProductos) {
+    let botonesEliminarProducto = document.getElementsByClassName('img-eliminar-producto')
+    for (const boton of botonesEliminarProducto) {
+        boton.onclick = (e) => {
+            id = e.currentTarget.id
+            talleSeleccionado = id.slice(0, 1)
+            idProducto = id.slice(1)
+            const productoAEliminar = carrito.find((productos) => ((idProducto == productos[0].id) && (talleSeleccionado == productos[2])))
+            idx = carrito.indexOf(productoAEliminar)
+            carrito.splice(idx, 1)
+            bodyCarrito.innerHTML = ``
+            cantProductos.innerText = carrito.length
+            localStorage.setItem('carrito', JSON.stringify(carrito))
+            mostrarCarritoVacio()
+            mostrarCarrito()
+        }
+    }
+}
+
+
+// ELIMINAR UNIDAD DE CARRITO 
+function eliminarUnidadDelCarrito(carrito, cantProductos) {
+    let botonesQuitarUnidad = document.getElementsByClassName('cant-producto__quitar')
+    for (const boton of botonesQuitarUnidad) {
+        boton.onclick = (e) => {
+            id = e.currentTarget.id
+            talleSeleccionado = id.slice(0, 1)
+            idProducto = id.slice(1)
+            for (const productos of carrito) {
+                if ((productos[0].id == idProducto) && (productos[2] == talleSeleccionado)) {
+                    if ((productos[1] - 1) > 0) {
+                        productos[1] -= 1
+                        mostrarCarrito()
+                        return
+                    }
+                    else {
+                        idx = carrito.indexOf(productos)
+                        carrito.splice(idx, 1)
+                        bodyCarrito.innerHTML = ``
+                        cantProductos.innerText = carrito.length
+                        localStorage.setItem('carrito', JSON.stringify(carrito))
+                        mostrarCarritoVacio()
+                        mostrarCarrito()
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MOSTRAR CARRITO DE COMPRAS
 function mostrarCarrito() {
     if (carrito.length != 0) {
         alertCarrito.remove()
+        bodyCarrito.innerHTML = ``
         containerCarrito = document.createElement('div')
         containerCarrito.setAttribute('class', 'container-carrito')
         carritoProductos = document.createElement('ul')
@@ -50,27 +183,44 @@ function mostrarCarrito() {
         carritoProductos.setAttribute('id', 'carritoProductos')
         containerCarrito.append(carritoProductos)
         bodyCarrito.append(containerCarrito)
-        carrito.forEach((producto) => {
+        carrito.forEach((productos) => {
+            let [producto, cantidad, talle] = productos
             carritoProductos.innerHTML += `
             <li class="carrito__producto">
                 <div class="producto-img">
-                    <img src=${producto.img.slice(1)} alt=${producto.nombre}>
+                    <img src=${producto.img} alt=${producto.nombre}>
                 </div>
                 <div class="producto-info">
-                    <p class="producto-carrito-nombre">${producto.nombre}</p>
+                    <p class="producto-carrito-nombre">${producto.nombre} <span class="producto-carrito-talle">(${talle})</span></p>
                     <p class="producto-carrito-precio">$${producto.precio.toLocaleString()}</p>
+                    <div class="container-cant-producto">
+                        <span class="cant-producto__quitar" id=${talle}${producto.id}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                            </svg>
+                        </span>
+                        <p class="cant-producto__total">${cantidad}</p>
+                        <span class="cant-producto__agregar" id=${talle}${producto.id}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                </svg>
+                            </span>
+                    </div>
                 </div>
-                <button class="eliminar-producto-logo" id=${producto.id}>
-                    <img src="./img/header/eliminar.png" alt="Eliminar Producto">
+                <button class="eliminar-producto-logo">
+                    <img src="../img/header/eliminar.png" class="img-eliminar-producto" id=${talle}${producto.id} alt="Eliminar Producto">
                 </button>
             </li>`
-            
-            cantProductos.innerText = carrito.length
+            cantProductos.innerText = carrito.reduce((subCantidad, productos) => subCantidad + productos[1], 0)
+            verificarStockYaEnCarrito()
+            if (carrito.length != 0) {
+                eliminarUnidadDelCarrito(carrito, cantProductos)
+                eliminarProductoCarrito(carrito, cantProductos)
+            }
         })
-        
         vaciarCarrito()
-
         mostrarPrecioTotal(carrito, numCuotasSinInteres)
+        iniciarCompra()
     }
 }
 
@@ -113,9 +263,31 @@ function mostrarPrecioTotal(carrito, numCuotasSinInteres) {
 
 // CALCULAR PRECIO TOTAL
 function calcularPrecioTotal(carrito, numCuotasSinInteres) { 
-    let total = carrito.reduce((subTotal, producto) => subTotal + producto.precio, 0)
+    let total = carrito.reduce((subTotal, producto) => subTotal + (producto[0].precio * producto[1]), 0)
     let precioPorCuota = Math.trunc((total / numCuotasSinInteres) + (total / numCuotasSinInteres) * 0)
     return [total, precioPorCuota]
+}
+
+// INICIAR COMPRA
+function iniciarCompra() {
+    let iniciarCompra = document.createElement("button")
+    iniciarCompra.setAttribute('class', 'btn-iniciar-compra')
+    iniciarCompra.innerHTML = `
+    <p class=btn-iniciar-compra__text> Iniciar compra </p>`
+    containerCarrito.append(iniciarCompra)
+
+    iniciarCompra.onclick = () => {
+        Swal.fire(
+            '¡Listo!',
+            `Te agradecemos por comprar en nuestra tienda. Pronto nos pondremos en contacto para que puedas recibir tu pedido.`,
+            'success'
+        )
+        carrito = []
+        localStorage.setItem('carrito', JSON.stringify(carrito))
+        bodyCarrito.innerHTML = ``
+        cantProductos.innerText = carrito.length
+        mostrarCarritoVacio()
+    }
 }
 
 // ENVIAR OFERTAS POR MAIL

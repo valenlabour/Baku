@@ -5,100 +5,113 @@
             "categoria": "remeras",
             "nombre": "Remera Fear",
             "precio": 3499,
-            "img": "../img/remeras/remera-fear.jpg"
+            "img": "../img/remeras/remera-fear.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "002",
             "categoria": "remeras",
             "nombre": "Remera Stylver",
             "precio": 3499,
-            "img": "../img/remeras/remera-full-black.jpg"
+            "img": "../img/remeras/remera-full-black.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "003",
             "categoria": "remeras",
             "nombre": "Remera Good Life",
             "precio": 3499,
-            "img": "../img/remeras/remera-good-life.jpg"
+            "img": "../img/remeras/remera-good-life.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "004",
             "categoria": "remeras",
             "nombre": "Remera Arcano",
             "precio": 3499,
-            "img": "../img/remeras/remera-arcano.jpg"
+            "img": "../img/remeras/remera-arcano.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "005",
             "categoria": "buzos",
             "nombre": "Buzo Rider",
             "precio": 6699,
-            "img": "../img/buzos/buzo-rider.jpg"
+            "img": "../img/buzos/buzo-rider.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "006",
             "categoria": "buzos",
             "nombre": "Buzo Nigo Grey",
             "precio": 7299,
-            "img": "../img/buzos/buzo-nigo-grey.jpg"
+            "img": "../img/buzos/buzo-nigo-grey.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "007",
             "categoria": "buzos",
             "nombre": "Buzo Walo Pink",
             "precio": 7299,
-            "img": "../img/buzos/buzo-walo-pink.jpg"
+            "img": "../img/buzos/buzo-walo-pink.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "008",
             "categoria": "buzos",
             "nombre": "Buzo Nigo Vison",
             "precio": 7299,
-            "img": "../img/buzos/buzo-nigo-vison.jpg"
+            "img": "../img/buzos/buzo-nigo-vison.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "009",
             "categoria": "buzos",
             "nombre": "Buzo Future",
             "precio": 6699,
-            "img": "../img/buzos/buzo-future.jpg"
+            "img": "../img/buzos/buzo-future.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "010",
             "categoria": "buzos",
             "nombre": "Buzo Sloom",
             "precio": 6699,
-            "img": "../img/buzos/buzo-sloom.jpg"
+            "img": "../img/buzos/buzo-sloom.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "011",
             "categoria": "pantalones",
             "nombre": "Jean Cropped",
             "precio": 7240,
-            "img": "../img/pantalones/jean-cropped.jpg"
+            "img": "../img/pantalones/jean-cropped.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "012",
             "categoria": "pantalones",
             "nombre": "Jean Charles",
             "precio": 7890,
-            "img": "../img/pantalones/jean-charles.jpg"
+            "img": "../img/pantalones/jean-charles.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "013",
             "categoria": "pantalones",
             "nombre": "Jean Tyler",
             "precio": 8900,
-            "img": "../img/pantalones/jean-tyler.jpg"
+            "img": "../img/pantalones/jean-tyler.jpg",
+            "stock": [3, 5, 3, 3]
         },
         {
             "id": "014",
             "categoria": "pantalones",
             "nombre": "Jogger Rodd Navy",
             "precio": 6200,
-            "img": "../img/pantalones/jogger-rodd-navy.jpg"
+            "img": "../img/pantalones/jogger-rodd-navy.jpg",
+            "stock": [3, 5, 3, 3]
         }
     ],
-
     "usuarios" : []
 }
